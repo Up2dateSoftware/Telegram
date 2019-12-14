@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "459765968507",
+    "firebase_url": "https://chatsid-8570b.firebaseio.com",
+    "project_id": "chatsid-8570b",
+    "storage_bucket": "chatsid-8570b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459765968507:android:1cc88166346655ee77bcde",
+        "android_client_info": {
+          "package_name": "org.chatsid.messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459765968507-18vnbq9sto9sep3p1r7j75dra4ath3gu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDibExNtAlVTPoLeNBvm5vKl-De8CfDoOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459765968507-18vnbq9sto9sep3p1r7j75dra4ath3gu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459765968507:android:0355cc045bf1d9cf77bcde",
+        "android_client_info": {
+          "package_name": "org.chatsid.messenger.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459765968507-18vnbq9sto9sep3p1r7j75dra4ath3gu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDibExNtAlVTPoLeNBvm5vKl-De8CfDoOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459765968507-18vnbq9sto9sep3p1r7j75dra4ath3gu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

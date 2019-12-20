@@ -109,6 +109,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import chatsid.Restrictions;
+
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment {
 
@@ -720,6 +722,8 @@ public class LoginActivity extends BaseFragment {
 
         private EditTextBoldCursor codeField;
         private HintEditText phoneField;
+        // ChatSID: Company code filed
+        private EditTextBoldCursor companyCodeField;
         private TextView countryButton;
         private View view;
         private TextView textView;
@@ -977,18 +981,48 @@ public class LoginActivity extends BaseFragment {
                     ignoreOnPhoneChange = false;
                 }
             });
-            phoneField.setOnEditorActionListener((textView, i, keyEvent) -> {
-                if (i == EditorInfo.IME_ACTION_NEXT) {
-                    onNextPressed();
-                    return true;
-                }
-                return false;
-            });
+
             phoneField.setOnKeyListener((v, keyCode, event) -> {
                 if (keyCode == KeyEvent.KEYCODE_DEL && phoneField.length() == 0) {
                     codeField.requestFocus();
                     codeField.setSelection(codeField.length());
                     codeField.dispatchKeyEvent(event);
+                    return true;
+                }
+                return false;
+            });
+
+            // ChatSID: Company code filed
+            companyCodeField = new EditTextBoldCursor(context) {
+                @Override
+                public boolean onTouchEvent(MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        if (!AndroidUtilities.showKeyboard(this)) {
+                            clearFocus();
+                            requestFocus();
+                        }
+                    }
+                    return super.onTouchEvent(event);
+                }
+            };
+            companyCodeField.setInputType(InputType.TYPE_CLASS_TEXT);
+            companyCodeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            companyCodeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+            companyCodeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+            companyCodeField.setPadding(0, 0, 0, 0);
+            companyCodeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            companyCodeField.setCursorSize(AndroidUtilities.dp(20));
+            companyCodeField.setCursorWidth(1.5f);
+            companyCodeField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            companyCodeField.setMaxLines(1);
+            companyCodeField.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            companyCodeField.setHintText(getResources().getString(R.string.CompanyCode));
+            companyCodeField.setHint(R.string.CompanyCode);
+            companyCodeField.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+            addView(companyCodeField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36, 0, 14, 0, 14));
+            companyCodeField.setOnEditorActionListener((textView, i, keyEvent) -> {
+                if (i == EditorInfo.IME_ACTION_NEXT) {
+                    onNextPressed();
                     return true;
                 }
                 return false;
@@ -1209,10 +1243,23 @@ public class LoginActivity extends BaseFragment {
                 needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("WrongCountry", R.string.WrongCountry));
                 return;
             }
+
+            Restrictions restrictions = new Restrictions(getContext());
+
             if (codeField.length() == 0) {
                 needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 return;
             }
+            if (companyCodeField.length() == 0) {
+                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCompanyCode", R.string.InvalidCompanyCode));
+                return;
+            }
+
+            if (!restrictions.setRestriction(companyCodeField.getText().toString())) {
+                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCompanyCode", R.string.InvalidCompanyCode));
+                return;
+            }
+
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
             if (getParentActivity() instanceof LaunchActivity) {
                 for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {

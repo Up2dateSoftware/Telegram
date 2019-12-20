@@ -3047,4 +3047,8 @@
     <string name="RemindTodayAt">\'Remind today at\' HH:mm</string>
     <string name="RemindDayAt">\'Remind on\' MMM d \'at\' HH:mm</string>
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
+
+    <!-- ChatSID -->
+    <string name="CompanyCode" translatable="false">Company Code</string>
+    <string name="InvalidCompanyCode">Invalid company code. Please check the company code and try again.</string>
 </resources>

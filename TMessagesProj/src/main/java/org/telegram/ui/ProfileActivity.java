@@ -109,6 +109,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
+import chatsid.Restrictions;
+
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
     private RecyclerListView listView;
@@ -841,6 +843,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 AlertsCreator.showCustomNotificationsDialog(ProfileActivity.this, did, -1, null, currentAccount, param -> listAdapter.notifyItemChanged(notificationsRow));
             } else if (position == startSecretChatRow) {
+                // ChatSID.START
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getEncrypted()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                // ChatSID.END
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", R.string.AreYouSureSecretChatTitle));
                 builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
@@ -1089,6 +1099,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarImage.setPivotY(0);
         frameLayout.addView(avatarImage, LayoutHelper.createFrame(42, 42, Gravity.TOP | Gravity.LEFT, 64, 0, 0, 0));
         avatarImage.setOnClickListener(v -> {
+            // ChatSID.START
+            if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                if (!Restrictions.getInstance().getRestrictionItem().getAvatars()) {
+                    Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            // ChatSID.END
             if (user_id != 0) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);
                 if (user.photo != null && user.photo.photo_big != null) {
@@ -2980,18 +2998,41 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (!TextUtils.isEmpty(user.phone)) {
                             item.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
                         }
-                        if (isBot) {
-                            item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+
+                        // ChatSID.START
+                        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                            if (Restrictions.getInstance().getRestrictionItem().getBlock()) {
+                                if (isBot) {
+                                    item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+                                } else {
+                                    item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                                }
+                            }
                         } else {
-                            item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                            if (isBot) {
+                                item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+                            } else {
+                                item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                            }
                         }
+                        // ChatSID.END
+
                     }
                 } else {
                     item = menu.addItem(10, R.drawable.ic_ab_other);
                     if (!TextUtils.isEmpty(user.phone)) {
                         item.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
                     }
-                    item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (Restrictions.getInstance().getRestrictionItem().getBlock()) {
+                            item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+
+                        }
+                    } else {
+                        item.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                    }
+                    // ChatSID.END
                     item.addSubItem(edit_contact, R.drawable.msg_edit, LocaleController.getString("EditContact", R.string.EditContact));
                     item.addSubItem(delete_contact, R.drawable.msg_delete, LocaleController.getString("DeleteContact", R.string.DeleteContact));
                 }

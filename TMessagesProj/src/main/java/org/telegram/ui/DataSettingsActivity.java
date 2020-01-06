@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
@@ -45,6 +47,8 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import chatsid.Restrictions;
 
 public class DataSettingsActivity extends BaseFragment {
 
@@ -156,6 +160,13 @@ public class DataSettingsActivity extends BaseFragment {
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == mobileRow || position == roamingRow || position == wifiRow) {
+
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 if (LocaleController.isRTL && x <= AndroidUtilities.dp(76) || !LocaleController.isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76)) {
                     boolean wasEnabled = listAdapter.isRowEnabled(resetDownloadRow);
 
@@ -220,6 +231,12 @@ public class DataSettingsActivity extends BaseFragment {
             } else if (position == resetDownloadRow) {
                 if (getParentActivity() == null || !view.isEnabled()) {
                     return;
+                }
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", R.string.ResetAutomaticMediaDownloadAlertTitle));
@@ -319,29 +336,65 @@ public class DataSettingsActivity extends BaseFragment {
             } else if (position == proxyRow) {
                 presentFragment(new ProxyListActivity());
             } else if (position == enableStreamRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleStreamMedia();
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(SharedConfig.streamMedia);
             } else if (position == enableAllStreamRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleStreamAllVideo();
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(SharedConfig.streamAllVideo);
             } else if (position == enableMkvRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleStreamMkv();
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(SharedConfig.streamMkv);
             } else if (position == enableCacheStreamRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleSaveStreamMedia();
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 textCheckCell.setChecked(SharedConfig.saveStreamMedia);
             } else if (position == quickRepliesRow) {
                 presentFragment(new QuickRepliesSettingsActivity());
             } else if (position == autoplayGifsRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleAutoplayGifs();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.autoplayGifs);
                 }
             } else if (position == autoplayVideoRow) {
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 SharedConfig.toggleAutoplayVideo();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.autoplayVideo);

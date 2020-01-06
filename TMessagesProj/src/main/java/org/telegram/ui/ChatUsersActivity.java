@@ -73,6 +73,8 @@ import java.util.HashMap;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import chatsid.Restrictions;
+
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listViewAdapter;
@@ -2008,7 +2010,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 searchResult.clear();
                 searchResultNames.clear();
                 searchAdapterHelper.mergeResults(null);
-                searchAdapterHelper.queryServerSearch(null, type != 0, false, true, false, ChatObject.isChannel(currentChat) ? chatId : 0, false, type);
+                // ChatSID.START
+                Boolean allowBots = true;
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                }
+                searchAdapterHelper.queryServerSearch(null, type != 0, false, allowBots, false, ChatObject.isChannel(currentChat) ? chatId : 0, false, type);
+                // ChatSID.END
                 notifyDataSetChanged();
             } else {
                 Utilities.searchQueue.postRunnable(searchRunnable = () -> processSearch(query), 300);
@@ -2022,8 +2030,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 int kickedType;
                 final ArrayList<TLRPC.ChatParticipant> participantsCopy = !ChatObject.isChannel(currentChat) && info != null ? new ArrayList<>(info.participants.participants) : null;
                 final ArrayList<TLRPC.TL_contact> contactsCopy = selectType == 1 ? new ArrayList<>(getContactsController().contacts) : null;
-
-                searchAdapterHelper.queryServerSearch(query, selectType != 0, false, true, false, ChatObject.isChannel(currentChat) ? chatId : 0, false, type);
+                // ChatSID.START
+                Boolean allowBots = true;
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                }
+                searchAdapterHelper.queryServerSearch(query, selectType != 0, false, allowBots, false, ChatObject.isChannel(currentChat) ? chatId : 0, false, type);
                 if (participantsCopy != null || contactsCopy != null) {
                     Utilities.searchQueue.postRunnable(() -> {
                         String search1 = query.trim().toLowerCase();

@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import chatsid.Restrictions;
+
 public class SearchAdapterHelper {
 
     public static class HashtagObject {
@@ -251,6 +253,16 @@ public class SearchAdapterHelper {
                                 }
                             }
                             lastFoundUsername = query.toLowerCase();
+
+                            // ChatSID.START
+                            if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                                if (!Restrictions.getInstance().getRestrictionItem().getNotcontacts()) {
+                                    globalSearch.clear();
+                                    globalSearchMap.clear();
+                                }
+                            }
+                            // ChatSID.END
+
                             if (localSearchResults != null) {
                                 mergeResults(localSearchResults);
                             }

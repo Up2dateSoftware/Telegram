@@ -119,6 +119,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import chatsid.Restrictions;
+
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
     private RecyclerListView listView;
@@ -623,6 +625,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (user == null) {
                 return;
             }
+            // ChatSID.START
+            if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                if (!Restrictions.getInstance().getRestrictionItem().getAvatars()) {
+                    Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            // ChatSID.END
             imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null));
         });
         writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", R.string.AccDescrChangeProfilePicture));

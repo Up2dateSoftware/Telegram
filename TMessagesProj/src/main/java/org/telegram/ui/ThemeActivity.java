@@ -99,6 +99,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import chatsid.Restrictions;
+
 public class ThemeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int THEME_TYPE_BASIC = 0;
@@ -588,6 +590,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     ((TextCheckCell) view).setChecked(SharedConfig.raiseToSpeak);
                 }
             } else if (position == saveToGalleryRow) {
+                // ChatSID.START
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getSavePhoto()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                // ChatSID.END
                 SharedConfig.toggleSaveToGallery();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.saveToGallery);
@@ -645,6 +655,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == stickersRow) {
+                // ChatSID.START
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    if (!Restrictions.getInstance().getRestrictionItem().getStickers()) {
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                // ChatSID.END
                 presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE));
             } else if (position == emojiRow) {
                 SharedConfig.toggleBigEmoji();

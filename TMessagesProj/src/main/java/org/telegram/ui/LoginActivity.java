@@ -992,7 +992,7 @@ public class LoginActivity extends BaseFragment {
                 return false;
             });
 
-            // ChatSID: Company code filed
+            // ChatSID.START
             companyCodeField = new EditTextBoldCursor(context) {
                 @Override
                 public boolean onTouchEvent(MotionEvent event) {
@@ -1027,6 +1027,7 @@ public class LoginActivity extends BaseFragment {
                 }
                 return false;
             });
+            // ChatSID.END
 
             textView2 = new TextView(context);
             textView2.setText(LocaleController.getString("StartText", R.string.StartText));
@@ -1244,21 +1245,22 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
 
-            Restrictions restrictions = new Restrictions(getContext());
-
             if (codeField.length() == 0) {
                 needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 return;
             }
+
+            // ChatSID.START
             if (companyCodeField.length() == 0) {
                 needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCompanyCode", R.string.InvalidCompanyCode));
                 return;
             }
 
-            if (!restrictions.setRestriction(companyCodeField.getText().toString())) {
+            if (!Restrictions.getInstance().setRestriction(companyCodeField.getText().toString())) {
                 needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCompanyCode", R.string.InvalidCompanyCode));
                 return;
             }
+            // ChatSID.END
 
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
             if (getParentActivity() instanceof LaunchActivity) {

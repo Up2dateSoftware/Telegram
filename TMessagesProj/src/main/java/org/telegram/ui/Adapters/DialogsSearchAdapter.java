@@ -57,6 +57,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import chatsid.Restrictions;
+
 public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
@@ -838,7 +840,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             searchResultHashtags.clear();
             searchAdapterHelper.mergeResults(null);
             if (needMessagesSearch != 2) {
-                searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, dialogsType == 0, 0);
+                // ChatSID.START
+                Boolean allowBots = true;
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                }
+                searchAdapterHelper.queryServerSearch(null, true, true, allowBots, true, 0, dialogsType == 0, 0);
             }
             searchWas = false;
             lastSearchId = -1;
@@ -877,7 +884,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                         return;
                     }
                     if (needMessagesSearch != 2) {
-                        searchAdapterHelper.queryServerSearch(query, true, dialogsType != 4, true, dialogsType != 4, 0, dialogsType == 0, 0);
+                        // ChatSID.START
+                        Boolean allowBots = true;
+                        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                            allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                        }
+                        searchAdapterHelper.queryServerSearch(query, true, dialogsType != 4, allowBots, dialogsType != 4, 0, dialogsType == 0, 0);
                     }
                     searchMessagesInternal(text);
                 });

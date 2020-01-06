@@ -87,6 +87,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import chatsid.Restrictions;
+
 public class GroupCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
 
     private ScrollView scrollView;
@@ -1342,7 +1344,12 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 notifyDataSetChanged();
             } else {
                 Utilities.searchQueue.postRunnable(searchRunnable = () -> AndroidUtilities.runOnUIThread(() -> {
-                    searchAdapterHelper.queryServerSearch(query, true, isAlwaysShare || isNeverShare, true, false, 0, false, 0);
+                    // ChatSID.START
+                    Boolean allowBots = true;
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                    }
+                    searchAdapterHelper.queryServerSearch(query, true, isAlwaysShare || isNeverShare, allowBots, false, 0, false, 0);
                     Utilities.searchQueue.postRunnable(searchRunnable = () -> {
                         String search1 = query.trim().toLowerCase();
                         if (search1.length() == 0) {

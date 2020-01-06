@@ -3,6 +3,8 @@ package org.telegram.messenger;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
+import chatsid.Restrictions;
+
 public class ImageLocation {
 
     public int dc_id;
@@ -107,6 +109,7 @@ public class ImageLocation {
         if (fileLocation == null) {
             return null;
         }
+
         TLRPC.TL_inputPeerUser inputPeer = new TLRPC.TL_inputPeerUser();
         inputPeer.user_id = user.id;
         inputPeer.access_hash = user.access_hash;
@@ -116,6 +119,11 @@ public class ImageLocation {
         } else {
             dc_id = fileLocation.dc_id;
         }
+        // ChatSID.START
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            if (!Restrictions.getInstance().getRestrictionItem().getAvatars()) return null;
+        }
+        // ChatSID.END
         return getForPhoto(fileLocation, 0, null, null, inputPeer, big, dc_id, null, null);
     }
 

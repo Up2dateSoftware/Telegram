@@ -3050,5 +3050,26 @@
 
     <!-- ChatSID -->
     <string name="CompanyCode" translatable="false">Company Code</string>
-    <string name="InvalidCompanyCode">Invalid company code. Please check the company code and try again.</string>
+    <string name="InvalidCompanyCode" translatable="false">Invalid company code. Please check the company code and try again.</string>
+    <string name="StickersNotAllowed" translatable="false">Stickers are not allowed by security policy.</string>
+    <string name="FunctionUnavailable" translatable="false">Sorry, this feature is currently not allowed by security policy.</string>
+    <string name="GroupVideoNotAllowed" translatable="false">Receiving videos in group chat is not allowed by security policy.</string>
+    <string name="PrivateVideoNotAllowed" translatable="false">Receiving videos in private is not allowed by security policy.</string>
+    <string name="GroupVideoSendNotAllowed" translatable="false">Sending videos in group chat is not allowed by security policy.</string>
+    <string name="PrivateVideoSendNotAllowed" translatable="false">Sending videos in private is not allowed by security policy.</string>
+    <string name="GroupPhotoNotAllowed" translatable="false">Receiving photos in group chat is not allowed by security policy.</string>
+    <string name="PrivatePhotoNotAllowed" translatable="false">Receiving photos in private is not allowed by security policy.</string>
+    <string name="GroupPhotoSendNotAllowed" translatable="false">Sending photos in group chat is not allowed by security policy.</string>
+    <string name="PrivatePhotoSendNotAllowed" translatable="false">Sending photos in private is not allowed by security policy.</string>
+    <string name="NotAllowedToCreateGroup" translatable="false">You are not allowed to create new group by security policy.</string>
+    <string name="NotAllowedToUseThisFunction" translatable="false">You are not allowed to use this function by security policy.</string>
+    <string name="NotAllowedToTalkWithBots" translatable="false">You are not allowed to talk with bots by security policy.</string>
+    <string name="NotAllowedToCreateChannel" translatable="false">You are not allowed to create new channels by security policy.</string>
+    <string name="ToManyGroupsJoined" translatable="false">You joined to many groups. Please exit at least</string>
+    <string name="ToManyGroupsCreated" translatable="false">You created to many groups. Please exit at least</string>
+    <string name="GroupsToBeAbleToContinue" translatable="false">groups to be able to continue.</string>
+    <string name="ToManyChannelsJoined" translatable="false">You joined to many channels. Please exit at least</string>
+    <string name="ToManyChannelsCreated" translatable="false">You created to many channels. Please exit at least</string>
+    <string name="ChannelsToBeAbleToContinue" translatable="false">channels to be able to continue.</string>
+    <string name="NotAllowedToTalkWithPersonsNotInContacts" translatable="false">You are not allowed to talk with persons that are not in your contacts.</string>
 </resources>

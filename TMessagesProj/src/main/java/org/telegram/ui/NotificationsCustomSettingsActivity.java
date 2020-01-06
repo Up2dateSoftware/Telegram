@@ -71,6 +71,8 @@ import java.util.Map;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import chatsid.Restrictions;
+
 public class NotificationsCustomSettingsActivity extends BaseFragment {
 
     private RecyclerListView listView;
@@ -892,7 +894,12 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 searchResult.clear();
                 searchResultNames.clear();
                 searchAdapterHelper.mergeResults(null);
-                searchAdapterHelper.queryServerSearch(null, true, currentType != NotificationsController.TYPE_PRIVATE, true, false, 0, false, 0);
+                // ChatSID.START
+                Boolean allowBots = true;
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                }
+                searchAdapterHelper.queryServerSearch(null, true, currentType != NotificationsController.TYPE_PRIVATE, allowBots, false, 0, false, 0);
                 notifyDataSetChanged();
             } else {
                 Utilities.searchQueue.postRunnable(searchRunnable = () -> processSearch(query), 300);
@@ -901,7 +908,12 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
         private void processSearch(final String query) {
             AndroidUtilities.runOnUIThread(() -> {
-                searchAdapterHelper.queryServerSearch(query, true, currentType != NotificationsController.TYPE_PRIVATE, true, false, 0, false, 0);
+                // ChatSID.START
+                Boolean allowBots = true;
+                if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                    allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+                }
+                searchAdapterHelper.queryServerSearch(query, true, currentType != NotificationsController.TYPE_PRIVATE, allowBots, false, 0, false, 0);
                 final ArrayList<NotificationsSettingsActivity.NotificationException> contactsCopy = new ArrayList<>(exceptions);
                 Utilities.searchQueue.postRunnable(() -> {
                     String search1 = query.trim().toLowerCase();

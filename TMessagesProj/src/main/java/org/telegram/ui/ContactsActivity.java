@@ -91,6 +91,8 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import chatsid.Restrictions;
+
 public class ContactsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ContactsAdapter listViewAdapter;
@@ -294,6 +296,12 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", R.string.AccDescrContactSorting));
         }
 
+        // ChatSID.START
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            allowBots = Restrictions.getInstance().getRestrictionItem().getBots();
+        }
+        // ChatSID.END
+
         searchListViewAdapter = new SearchAdapter(context, ignoreUsers, allowUsernameSearch, false, false, allowBots, true, 0);
         int inviteViaLink;
         if (chatId != 0) {
@@ -455,6 +463,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             Bundle args = new Bundle();
                             presentFragment(new GroupCreateActivity(args), false);
                         } else if (row == 1) {
+                            // ChatSID.START
+                            if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                                if (!Restrictions.getInstance().getRestrictionItem().getEncrypted()) {
+                                    Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                            }
+                            // ChatSID.END
                             Bundle args = new Bundle();
                             args.putBoolean("onlyUsers", true);
                             args.putBoolean("destroyAfterSelect", true);

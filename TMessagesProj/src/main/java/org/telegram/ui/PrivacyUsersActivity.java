@@ -15,8 +15,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import chatsid.Restrictions;
 
 public class PrivacyUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ContactsActivity.ContactsActivityDelegate {
 
@@ -153,7 +157,17 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         listView.setOnItemClickListener((view, position) -> {
             if (position == blockUserRow) {
                 if (blockedUsersActivity) {
-                    presentFragment(new DialogOrContactPickerActivity());
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (Restrictions.getInstance().getRestrictionItem().getBlock()) {
+                            presentFragment(new DialogOrContactPickerActivity());
+                        } else {
+                            Toast.makeText(ApplicationLoader.applicationContext, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        presentFragment(new DialogOrContactPickerActivity());
+                    }
+                    // ChatSID.END
                 } else {
                     Bundle args = new Bundle();
                     args.putBoolean(isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);

@@ -50,6 +50,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.FileLoader;
@@ -106,6 +107,8 @@ import java.util.Map;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import chatsid.Restrictions;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
@@ -417,6 +420,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     presentFragment(new GroupCreateActivity(args));
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 3) {
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (!Restrictions.getInstance().getRestrictionItem().getEncrypted()) {
+                            Toast.makeText(this, R.string.FunctionUnavailable, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                    // ChatSID.END
                     Bundle args = new Bundle();
                     args.putBoolean("onlyUsers", true);
                     args.putBoolean("destroyAfterSelect", true);
@@ -2653,7 +2664,67 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             showUpdateActivity(UserConfig.selectedAccount, UserConfig.getInstance(0).pendingAppUpdate, true);
         }
         checkAppUpdate(false);
+        // ChatSID.START
+        enforceChatSIDRules();
+        // ChatSID.END
     }
+
+    // ChatSID.START
+    private void enforceChatSIDRules() {
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            if (!Restrictions.getInstance().getRestrictionItem().getSavePhoto()) {
+                if (SharedConfig.saveToGallery) { SharedConfig.toggleSaveToGallery(); }
+            }
+            if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+                if (SharedConfig.saveToGallery) { SharedConfig.toggleSaveToGallery(); }
+                if (SharedConfig.autoplayGifs) { SharedConfig.toggleAutoplayGifs(); }
+                if (SharedConfig.autoplayVideo) { SharedConfig.toggleAutoplayVideo(); }
+                if (SharedConfig.streamAllVideo) { SharedConfig.toggleStreamAllVideo(); }
+                if (SharedConfig.streamMedia) { SharedConfig.toggleStreamMedia(); }
+                if (SharedConfig.streamMkv) { SharedConfig.toggleStreamAllVideo(); }
+                if (SharedConfig.saveStreamMedia) { SharedConfig.toggleSaveStreamMedia(); }
+
+                SharedPreferences.Editor editor = MessagesController.getMainSettings(currentAccount).edit();
+
+                DownloadController.Preset mobilePreset = DownloadController.getInstance(currentAccount).mobilePreset;
+                DownloadController.Preset wifiPreset = DownloadController.getInstance(currentAccount).wifiPreset;
+                DownloadController.Preset roamingPreset = DownloadController.getInstance(currentAccount).roamingPreset;
+
+                if (mobilePreset.isEnabled()) {
+                    mobilePreset.enabled = !mobilePreset.isEnabled();
+                }
+                if (wifiPreset.isEnabled()) {
+                    wifiPreset.enabled = !wifiPreset.isEnabled();
+                }
+                if (roamingPreset.isEnabled()) {
+                    roamingPreset.enabled = !roamingPreset.isEnabled();
+                }
+
+                editor.putString("mobilePreset", mobilePreset.toString());
+                editor.putInt("currentMobilePreset", 3);
+                editor.commit();
+                DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
+                DownloadController.getInstance(currentAccount).savePresetToServer(0);
+
+                editor.putString("wifiPreset", wifiPreset.toString());
+                editor.putInt("currentWifiPreset", 3);
+                editor.commit();
+                DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
+                DownloadController.getInstance(currentAccount).savePresetToServer(1);
+
+                editor.putString("roamingPreset", roamingPreset.toString());
+                editor.putInt("currentRoamingPreset", 3);
+                editor.commit();
+                DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
+                DownloadController.getInstance(currentAccount).savePresetToServer(2);
+
+
+            }
+
+            DownloadController.getInstance(currentAccount).loadAutoDownloadConfig(true);
+        }
+    }
+    // ChatSID.END
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

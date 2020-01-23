@@ -91,6 +91,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import chatsid.Restrictions;
+
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private ArrayList<View> views = new ArrayList<>();
@@ -1374,7 +1376,16 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             });
             stickersGridView.setPadding(0, AndroidUtilities.dp(4 + 48), 0, 0);
             stickersGridView.setClipToPadding(false);
-            views.add(stickersContainer);
+            if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                if (!Restrictions.getInstance().getRestrictionItem().getStickers())  {
+
+                } else {
+                    views.add(stickersContainer);
+                }
+            } else {
+                views.add(stickersContainer);
+            }
+
             stickersSearchGridAdapter = new StickersSearchGridAdapter(context);
             stickersGridView.setAdapter(stickersGridAdapter = new StickersGridAdapter(context));
             stickersGridView.setOnTouchListener((v, event) -> ContentPreviewViewer.getInstance().onTouch(event, stickersGridView, EmojiView.this.getMeasuredHeight(), stickersOnItemClickListener, contentPreviewViewerDelegate));

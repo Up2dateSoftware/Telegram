@@ -55,6 +55,9 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import chatsid.EntityRestriction;
+import chatsid.Restrictions;
+
 public class MessageObject {
 
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -2346,16 +2349,121 @@ public class MessageObject {
                     } else {
                         messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
                     }
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (messageOwner.to_id!=null) {
+                            if (messageOwner.to_id.user_id>0) {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivatePhotoSendNotAllowed", R.string.PrivatePhotoSendNotAllowed);
+                                        messageText = LocaleController.getString("PrivatePhotoSendNotAllowed", R.string.PrivatePhotoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivatePhotoNotAllowed", R.string.PrivatePhotoNotAllowed);
+                                        messageText = LocaleController.getString("PrivatePhotoNotAllowed", R.string.PrivatePhotoNotAllowed);
+                                    }
+                                }
+                            } else {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupPhotoSendNotAllowed", R.string.GroupPhotoSendNotAllowed);
+                                        messageText = LocaleController.getString("GroupPhotoSendNotAllowed", R.string.GroupPhotoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupPhotoNotAllowed", R.string.GroupPhotoNotAllowed);
+                                        messageText = LocaleController.getString("GroupPhotoNotAllowed", R.string.GroupPhotoNotAllowed);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // ChatSID.END
                 } else if (isVideo() || messageOwner.media instanceof TLRPC.TL_messageMediaDocument && getDocument() instanceof TLRPC.TL_documentEmpty && messageOwner.media.ttl_seconds != 0) {
                     if (messageOwner.media.ttl_seconds != 0 && !(messageOwner instanceof TLRPC.TL_message_secret)) {
                         messageText = LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
                     } else {
                         messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
                     }
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (messageOwner.to_id!=null) {
+                            if (messageOwner.to_id.user_id>0) {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getVideoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivateVideoSendNotAllowed", R.string.PrivateVideoSendNotAllowed);
+                                        messageText = LocaleController.getString("PrivateVideoSendNotAllowed", R.string.PrivateVideoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getVideoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivateVideoNotAllowed", R.string.PrivateVideoNotAllowed);
+                                        messageText = LocaleController.getString("PrivateVideoNotAllowed", R.string.PrivateVideoNotAllowed);
+                                    }
+                                }
+                            } else {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getVideoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupVideoSendNotAllowed", R.string.GroupVideoSendNotAllowed);
+                                        messageText = LocaleController.getString("GroupVideoSendNotAllowed", R.string.GroupVideoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getVideoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupVideoNotAllowed", R.string.GroupVideoNotAllowed);
+                                        messageText = LocaleController.getString("GroupVideoNotAllowed", R.string.GroupVideoNotAllowed);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // ChatSID.END
                 } else if (isVoice()) {
                     messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
                 } else if (isRoundVideo()) {
                     messageText = LocaleController.getString("AttachRound", R.string.AttachRound);
+                    // ChatSID.START
+                    if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                        if (messageOwner.to_id!=null) {
+                            if (messageOwner.to_id.user_id>0) {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getVideoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivateVideoSendNotAllowed", R.string.PrivateVideoSendNotAllowed);
+                                        messageText = LocaleController.getString("PrivateVideoSendNotAllowed", R.string.PrivateVideoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getVideoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("PrivateVideoNotAllowed", R.string.PrivateVideoNotAllowed);
+                                        messageText = LocaleController.getString("PrivateVideoNotAllowed", R.string.PrivateVideoNotAllowed);
+                                    }
+                                }
+                            } else {
+                                if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getVideoRestriction().getSend()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupVideoSendNotAllowed", R.string.GroupVideoSendNotAllowed);
+                                        messageText = LocaleController.getString("GroupVideoSendNotAllowed", R.string.GroupVideoSendNotAllowed);
+                                    }
+                                } else {
+                                    if (!Restrictions.getInstance().getRestrictionItem().getGroup().getVideoRestriction().getReceive()) {
+                                        messageOwner.media = null;
+                                        messageOwner.message = LocaleController.getString("GroupVideoNotAllowed", R.string.GroupVideoNotAllowed);
+                                        messageText = LocaleController.getString("GroupVideoNotAllowed", R.string.GroupVideoNotAllowed);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // ChatSID.END
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
                     messageText = LocaleController.getString("AttachLocation", R.string.AttachLocation);
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
@@ -2379,10 +2487,54 @@ public class MessageObject {
                         } else {
                             messageText = LocaleController.getString("AttachSticker", R.string.AttachSticker);
                         }
+                        // ChatSID.START
+                        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                            if (!Restrictions.getInstance().getRestrictionItem().getStickers()) {
+                                messageOwner.media = null;
+                                messageOwner.message = LocaleController.getString("StickersNotAllowed", R.string.StickersNotAllowed);
+                                messageText = LocaleController.getString("StickersNotAllowed", R.string.StickersNotAllowed);
+                            }
+                        }
+                        // ChatSID.END
                     } else if (isMusic()) {
                         messageText = LocaleController.getString("AttachMusic", R.string.AttachMusic);
                     } else if (isGif()) {
                         messageText = LocaleController.getString("AttachGif", R.string.AttachGif);
+                        // ChatSID.START
+                        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+                            if (messageOwner.to_id!=null) {
+                                if (messageOwner.to_id.user_id>0) {
+                                    if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                        if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getSend()) {
+                                            messageOwner.media = null;
+                                            messageOwner.message = LocaleController.getString("PrivatePhotoSendNotAllowed", R.string.PrivatePhotoSendNotAllowed);
+                                            messageText = LocaleController.getString("PrivatePhotoSendNotAllowed", R.string.PrivatePhotoSendNotAllowed);
+                                        }
+                                    } else {
+                                        if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getReceive()) {
+                                            messageOwner.media = null;
+                                            messageOwner.message = LocaleController.getString("PrivatePhotoNotAllowed", R.string.PrivatePhotoNotAllowed);
+                                            messageText = LocaleController.getString("PrivatePhotoNotAllowed", R.string.PrivatePhotoNotAllowed);
+                                        }
+                                    }
+                                } else {
+                                    if (messageOwner.from_id == UserConfig.getInstance(currentAccount).getCurrentUser().id) {
+                                        if (!Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getSend()) {
+                                            messageOwner.media = null;
+                                            messageOwner.message = LocaleController.getString("GroupPhotoSendNotAllowed", R.string.GroupPhotoSendNotAllowed);
+                                            messageText = LocaleController.getString("GroupPhotoSendNotAllowed", R.string.GroupPhotoSendNotAllowed);
+                                        }
+                                    } else {
+                                        if (!Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getReceive()) {
+                                            messageOwner.media = null;
+                                            messageOwner.message = LocaleController.getString("GroupPhotoNotAllowed", R.string.GroupPhotoNotAllowed);
+                                            messageText = LocaleController.getString("GroupPhotoNotAllowed", R.string.GroupPhotoNotAllowed);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // ChatSID.END
                     } else {
                         String name = FileLoader.getDocumentFileName(getDocument());
                         if (name != null && name.length() > 0) {

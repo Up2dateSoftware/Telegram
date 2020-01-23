@@ -106,6 +106,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import chatsid.Restrictions;
+
 public class ChatAttachAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
     public interface ChatAttachViewDelegate {
@@ -1058,7 +1060,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 return super.onInterceptTouchEvent(e);
             }
         };
-        gridView.setAdapter(adapter = new PhotoAttachAdapter(context, true));
+
+        // ChatSID.START
+        Boolean isCameraEnabled = true;
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            if (!Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getSend() || !Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getSend()) {
+                isCameraEnabled = false;
+                mediaEnabled = false;
+                mediaFromExternalCamera = false;
+            }
+        }
+        // ChatSID.END
+        gridView.setAdapter(adapter = new PhotoAttachAdapter(context, isCameraEnabled));
         gridView.setClipToPadding(false);
         gridView.setItemAnimator(null);
         gridView.setLayoutAnimation(null);

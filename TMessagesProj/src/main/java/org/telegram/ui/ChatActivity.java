@@ -196,6 +196,8 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 
+import chatsid.Restrictions;
+
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate {
 
@@ -5706,7 +5708,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         createChatAttachView();
-        chatAttachAlert.loadGalleryPhotos();
+
+        // ChatSID.START
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            if (Restrictions.getInstance().getRestrictionItem().getGroup().getPhotoRestriction().getSend() && Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getSend()) {
+                chatAttachAlert.loadGalleryPhotos();
+            }
+        } else {
+            chatAttachAlert.loadGalleryPhotos();
+        }
+        // ChatSID.END
+
         if (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22) {
             chatActivityEnterView.closeKeyboard();
         }

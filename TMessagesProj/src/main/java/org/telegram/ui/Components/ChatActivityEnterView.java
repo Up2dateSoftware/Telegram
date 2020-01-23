@@ -112,6 +112,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import chatsid.Restrictions;
+
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
     public interface ChatActivityEnterViewDelegate {

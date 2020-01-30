@@ -1,0 +1,3 @@
+livigent.jks
+pass: 1ttrryyyujh5588httyyuiopsgggd
+alias: Livigent

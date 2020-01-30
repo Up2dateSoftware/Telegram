@@ -104,10 +104,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
+import chatsid.GetRestrictionWorkManager;
 import chatsid.Restrictions;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
@@ -621,6 +626,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             FileLog.e(e);
         }
         MediaController.getInstance().setBaseActivity(this, true);
+
+        // ChatSID.START
+        PeriodicWorkRequest getPeriodicRestrictions= new PeriodicWorkRequest.Builder(GetRestrictionWorkManager.class, 15, TimeUnit.MINUTES).build();
+        WorkManager.getInstance(this).enqueue(getPeriodicRestrictions);
+        // ChatSID.END
     }
 
     public void switchToAccount(int account, boolean removeAll) {

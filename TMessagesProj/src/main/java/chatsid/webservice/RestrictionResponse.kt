@@ -1,8 +1,13 @@
 package chatsid.webservice
 
-import com.google.gson.annotations.SerializedName
-
 class RestrictionResponse {
+
+    val private: RestrictionResponseDefault? = null
+
+    val default: RestrictionResponseDefault? = null
+}
+
+class RestrictionResponseDefault {
 
     val group_join_limit: Int? = null
 
@@ -45,5 +50,4 @@ class RestrictionResponse {
     val allow_avatars: Boolean? = null
 
     val api_url: String? = null
-
 }

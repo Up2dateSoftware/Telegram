@@ -130,8 +130,6 @@ public class RestrictionItem {
         this.multimedia = multimedia;
     }
 
-
-
     public Boolean getAvatars() {
         return avatars;
     }

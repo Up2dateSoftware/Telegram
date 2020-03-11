@@ -14667,7 +14667,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                             return;
                                         }
                                     }
-                                    Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0);
+                                    // ChatSID.START
+                                    // Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0);
+                                    // ChatSID.END
                                 } else if (url instanceof ClickableSpan) {
                                     ((ClickableSpan) url).onClick(fragmentView);
                                 }

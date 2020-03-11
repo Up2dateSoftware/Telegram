@@ -2684,8 +2684,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (Restrictions.getInstance().getRestrictionItem()!=null) {
             if (!Restrictions.getInstance().getRestrictionItem().getSavePhoto()) {
                 if (SharedConfig.saveToGallery) { SharedConfig.toggleSaveToGallery(); }
+                if (SharedConfig.autoplayGifs) { SharedConfig.toggleAutoplayGifs(); }
             }
-            if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
+            if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getVideoRestriction().getReceive()) {
+                if (SharedConfig.autoplayVideo) { SharedConfig.toggleAutoplayVideo(); }
+                if (SharedConfig.streamAllVideo) { SharedConfig.toggleStreamAllVideo(); }
+                if (SharedConfig.streamMedia) { SharedConfig.toggleStreamMedia(); }
+                if (SharedConfig.streamMkv) { SharedConfig.toggleStreamAllVideo(); }
+                if (SharedConfig.saveStreamMedia) { SharedConfig.toggleSaveStreamMedia(); }
+            }
+            /*if (!Restrictions.getInstance().getRestrictionItem().getSavePhoto()) {
+                if (SharedConfig.saveToGallery) { SharedConfig.toggleSaveToGallery(); }
+            }*/
+            /*if (!Restrictions.getInstance().getRestrictionItem().getMultimedia()) {
                 if (SharedConfig.saveToGallery) { SharedConfig.toggleSaveToGallery(); }
                 if (SharedConfig.autoplayGifs) { SharedConfig.toggleAutoplayGifs(); }
                 if (SharedConfig.autoplayVideo) { SharedConfig.toggleAutoplayVideo(); }
@@ -2729,7 +2740,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 DownloadController.getInstance(currentAccount).savePresetToServer(2);
 
 
-            }
+            }*/
 
             DownloadController.getInstance(currentAccount).loadAutoDownloadConfig(true);
         }

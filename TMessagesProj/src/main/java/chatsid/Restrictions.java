@@ -135,6 +135,7 @@ public class Restrictions {
 
             restrictionItem.setGroup(new EntityRestriction(new PhotoRestriction(sharedPref.getBoolean(SharedPreferencesKeys.GroupPhotoSend.name(), false), sharedPref.getBoolean(SharedPreferencesKeys.GroupPhotoReceive.name(), false)), new VideoRestriction(sharedPref.getBoolean(SharedPreferencesKeys.GroupVideoSend.name(), false), sharedPref.getBoolean(SharedPreferencesKeys.GroupVideoReceive.name(), false))));
             restrictionItem.setPersonal(new EntityRestriction(new PhotoRestriction(sharedPref.getBoolean(SharedPreferencesKeys.PersonalPhotoSend.name(), false), sharedPref.getBoolean(SharedPreferencesKeys.PersonalPhotoReceive.name(), false)), new VideoRestriction(sharedPref.getBoolean(SharedPreferencesKeys.PersonalVideoSend.name(), false), sharedPref.getBoolean(SharedPreferencesKeys.PersonalVideoReceive.name(), false))));
+
             return restrictionItem;
         }
         return null;
@@ -149,7 +150,7 @@ public class Restrictions {
 
         restrictionItem.setCode("bhphoto");
         restrictionItem.setCompanyName("bhphoto");
-        restrictionItem.setDns("http://chatsid.bhphoto.com:5001/livigent/api/chatsid");
+        restrictionItem.setDns("http://chatsid.bhphoto.com:5001/livigent/api/chatsid/v2");
 
         return restrictionItem;
     }
@@ -163,7 +164,7 @@ public class Restrictions {
 
         restrictionItem.setCode("tag");
         restrictionItem.setCompanyName("tag");
-        restrictionItem.setDns("http://tagchatsid.rndsoftwaregroup.com:5001/livigent/api/chatsid");
+        restrictionItem.setDns("http://tagchatsid.rndsoftwaregroup.com:5001/livigent/api/chatsid/v2");
 
         return restrictionItem;
     }
@@ -177,7 +178,7 @@ public class Restrictions {
 
         restrictionItem.setCode("9000");
         restrictionItem.setCompanyName("9000");
-        restrictionItem.setDns("http://chatsid.geder.org:5001/livigent/api/chatsid");
+        restrictionItem.setDns("http://chatsid.geder.org:5001/livigent/api/chatsid/2");
         restrictionItem.setPersonal(new EntityRestriction(new PhotoRestriction(true, true), new VideoRestriction(true, true)));
         restrictionItem.setGroup(new EntityRestriction(new PhotoRestriction(true, true), new VideoRestriction(false, false)));
         restrictionItem.setBlock(true);

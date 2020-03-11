@@ -62,6 +62,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import chatsid.Restrictions;
+
 public class SendMessagesHelper extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap<>();
@@ -2281,6 +2283,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     private void sendMessage(String message, String caption, TLRPC.MessageMedia location, TLRPC.TL_photo photo, VideoEditedInfo videoEditedInfo, TLRPC.User user, TLRPC.TL_document document, TLRPC.TL_game game, TLRPC.TL_messageMediaPoll poll, long peer, String path, MessageObject reply_to_msg, TLRPC.WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<TLRPC.MessageEntity> entities, TLRPC.ReplyMarkup replyMarkup, HashMap<String, String> params, boolean notify, int scheduleDate, int ttl, Object parentObject) {
+
+        // ChatSID.START
+        if (Restrictions.getInstance().getRestrictionItem()!=null) {
+            if (!Restrictions.getInstance().getRestrictionItem().getPersonal().getPhotoRestriction().getSend() && photo!=null) {
+                return;
+            }
+         }
+        // ChatSID.END
+
         if (user != null && user.phone == null) {
             return;
         }

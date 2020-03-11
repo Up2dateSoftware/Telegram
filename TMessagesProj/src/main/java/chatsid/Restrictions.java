@@ -59,6 +59,8 @@ public class Restrictions {
         predefinedRestrictions.add(getBHPhotoRestrictions());
         predefinedRestrictions.add(getTagRestrictions());
         predefinedRestrictions.add(getGeder());
+        predefinedRestrictions.add(getGentech());
+        predefinedRestrictions.add(getMeshimercs());
     }
 
     public boolean setRestriction(String companyCode) {
@@ -178,7 +180,7 @@ public class Restrictions {
 
         restrictionItem.setCode("9000");
         restrictionItem.setCompanyName("9000");
-        restrictionItem.setDns("http://chatsid.geder.org:5001/livigent/api/chatsid/2");
+        restrictionItem.setDns("http://chatsid.geder.org:5001/livigent/api/chatsid/v2");
         restrictionItem.setPersonal(new EntityRestriction(new PhotoRestriction(true, true), new VideoRestriction(true, true)));
         restrictionItem.setGroup(new EntityRestriction(new PhotoRestriction(true, true), new VideoRestriction(false, false)));
         restrictionItem.setBlock(true);
@@ -187,6 +189,34 @@ public class Restrictions {
         restrictionItem.setGroupCreate(10);
         restrictionItem.setGroupJoin(10);
 
+
+        return restrictionItem;
+    }
+
+    /**
+     * meshimercs Restriction Item
+     * @return RestrictionItem
+     */
+    private RestrictionItem getMeshimercs() {
+        RestrictionItem restrictionItem = new RestrictionItem();
+
+        restrictionItem.setCode("meshimercs");
+        restrictionItem.setCompanyName("meshimercs");
+        restrictionItem.setDns("http://chatsid.meshimer.com:5001/livigent/api/chatsid/v2");
+
+        return restrictionItem;
+    }
+
+    /**
+     * Gentech Restriction Item
+     * @return RestrictionItem
+     */
+    private RestrictionItem getGentech() {
+        RestrictionItem restrictionItem = new RestrictionItem();
+
+        restrictionItem.setCode("gentech");
+        restrictionItem.setCompanyName("gentech");
+        restrictionItem.setDns("http://chatsid.gentechsolution.com:5001/livigent/api/chatsid/v2");
 
         return restrictionItem;
     }
